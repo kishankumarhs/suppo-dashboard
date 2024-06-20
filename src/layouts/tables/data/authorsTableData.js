@@ -1,21 +1,5 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable react/function-component-definition */
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
 
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDAvatar from "components/MDAvatar";
@@ -23,15 +7,28 @@ import MDBadge from "components/MDBadge";
 
 // Images
 import team2 from "assets/images/team-2.jpg";
-import team3 from "assets/images/team-3.jpg";
-import team4 from "assets/images/team-4.jpg";
+import { Avatar, Skeleton } from "@mui/material";
+import { blue } from "@mui/material/colors";
 
-export default function data() {
+export default function data(data, loading, error) {
+  console.log(data, loading, error)
   const Author = ({ image, name, email }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <MDAvatar src={image} name={name} size="sm" />
+      {
+        image ? (
+          <MDAvatar src={image} name={name} size="sm" />
+        ) : (
+          <Avatar
+            sx={{
+              bgcolor: "#" + Math.floor(Math.random() * 0xFFFFFF).toString(16),
+            }}
+            size="sm" >
+            {name[0].toUpperCase()}
+          </Avatar>
+        )
+      }
       <MDBox ml={2} lineHeight={1}>
-        <MDTypography display="block" variant="button" fontWeight="medium">
+        <MDTypography textTransform="capitalize" display="block" variant="button" fontWeight="medium">
           {name}
         </MDTypography>
         <MDTypography variant="caption">{email}</MDTypography>
@@ -48,130 +45,69 @@ export default function data() {
     </MDBox>
   );
 
-  return {
-    columns: [
-      { Header: "author", accessor: "author", width: "45%", align: "left" },
-      { Header: "function", accessor: "function", align: "left" },
-      { Header: "status", accessor: "status", align: "center" },
-      { Header: "employed", accessor: "employed", align: "center" },
-      { Header: "action", accessor: "action", align: "center" },
-    ],
+  const columns =
+    [
+      // { Header: "Id", accessor: "id", width: "20%", align: "left" },
+      { Header: "name", accessor: "name", width: "10%", align: "left" },
+      { Header: "address", accessor: "address", align: "left" },
+      { Header: "Listing Time", accessor: "listing_time", align: "center" },
+      { Header: "Gender", accessor: "gender", align: "center" },
+      { Header: "Date Of Birth", accessor: "dob", align: "center" },
+      { Header: "Premium User", accessor: "premium", align: "center" },
+    ]
 
-    rows: [
-      {
-        author: <Author image={team2} name="John Michael" email="john@creative-tim.com" />,
-        function: <Job title="Manager" description="Organization" />,
-        status: (
-          <MDBox ml={-1}>
-            <MDBadge badgeContent="online" color="success" variant="gradient" size="sm" />
-          </MDBox>
-        ),
-        employed: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            23/04/18
-          </MDTypography>
-        ),
-        action: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            Edit
-          </MDTypography>
-        ),
-      },
-      {
-        author: <Author image={team3} name="Alexa Liras" email="alexa@creative-tim.com" />,
-        function: <Job title="Programator" description="Developer" />,
-        status: (
-          <MDBox ml={-1}>
-            <MDBadge badgeContent="offline" color="dark" variant="gradient" size="sm" />
-          </MDBox>
-        ),
-        employed: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            11/01/19
-          </MDTypography>
-        ),
-        action: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            Edit
-          </MDTypography>
-        ),
-      },
-      {
-        author: <Author image={team4} name="Laurent Perrier" email="laurent@creative-tim.com" />,
-        function: <Job title="Executive" description="Projects" />,
-        status: (
-          <MDBox ml={-1}>
-            <MDBadge badgeContent="online" color="success" variant="gradient" size="sm" />
-          </MDBox>
-        ),
-        employed: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            19/09/17
-          </MDTypography>
-        ),
-        action: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            Edit
-          </MDTypography>
-        ),
-      },
-      {
-        author: <Author image={team3} name="Michael Levi" email="michael@creative-tim.com" />,
-        function: <Job title="Programator" description="Developer" />,
-        status: (
-          <MDBox ml={-1}>
-            <MDBadge badgeContent="online" color="success" variant="gradient" size="sm" />
-          </MDBox>
-        ),
-        employed: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            24/12/08
-          </MDTypography>
-        ),
-        action: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            Edit
-          </MDTypography>
-        ),
-      },
-      {
-        author: <Author image={team3} name="Richard Gran" email="richard@creative-tim.com" />,
-        function: <Job title="Manager" description="Executive" />,
-        status: (
-          <MDBox ml={-1}>
-            <MDBadge badgeContent="offline" color="dark" variant="gradient" size="sm" />
-          </MDBox>
-        ),
-        employed: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            04/10/21
-          </MDTypography>
-        ),
-        action: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            Edit
-          </MDTypography>
-        ),
-      },
-      {
-        author: <Author image={team4} name="Miriam Eric" email="miriam@creative-tim.com" />,
-        function: <Job title="Programator" description="Developer" />,
-        status: (
-          <MDBox ml={-1}>
-            <MDBadge badgeContent="offline" color="dark" variant="gradient" size="sm" />
-          </MDBox>
-        ),
-        employed: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            14/09/20
-          </MDTypography>
-        ),
-        action: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            Edit
-          </MDTypography>
-        ),
-      },
-    ],
+  const rows = loading && !data ? [{
+    name: <Skeleton />,
+    address: <Job title="Manager" description="Organization" />,
+    status: (
+      <MDBox ml={-1}>
+        <MDBadge badgeContent="online" color="success" variant="gradient" size="sm" />
+      </MDBox>
+    ),
+    employed: (
+      <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+        23/04/18
+      </MDTypography>
+    ),
+    action: (
+      <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+        Edit
+      </MDTypography>
+    ),
+  }] : data.map((item) => ({
+    id: item._id,
+    name: <Author image={item?.profile_pic} name={item.full_name} email={item.email} />,
+    address: <Job title={`${item.area},${item.city}`} description={`${item.house_no}, ${item.postcode}`} />,
+    listing_time: (
+      <MDBox ml={-1}>
+        <MDBadge badgeContent={`${(item.totalListenTime / 3600).toFixed(2)} hrs`} color="success" variant="gradient" size="sm" />
+      </MDBox>
+    ),
+    dob: (
+      <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+        {new Date(item.dob).toLocaleDateString()}
+      </MDTypography>
+    ),
+    premium: (
+      <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+        {
+          item.hasPremium ? "Yes" : "No"
+        }
+      </MDTypography>
+    ),
+    gender: (
+      <MDTypography component="a" href="#" textTransform='uppercase' variant="caption" color="text" fontWeight="medium">
+        {
+          item.gender
+        }
+      </MDTypography>
+    ),
+  }))
+
+
+
+  return {
+    columns: columns,
+    rows,
   };
 }
