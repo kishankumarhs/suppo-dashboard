@@ -1,18 +1,3 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 // @mui material components
 import Grid from "@mui/material/Grid";
 
@@ -34,9 +19,63 @@ import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 // Dashboard components
 import Projects from "layouts/dashboard/components/Projects";
 import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
+import { useGetRequest } from "utils/axiosHooks";
+import { USERS_ENDPOINT, PLANS_REQUEST_ENDPOINT } from "utils/axios.apis";
+import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 
 function Dashboard() {
   const { sales, tasks } = reportsLineChartData;
+  const {
+    data,
+    loading: userLoading,
+    error: userError,
+  } = useGetRequest(USERS_ENDPOINT.GET_ALL.URL);
+  const { data: planReq, loading: planReqLoading } = useGetRequest(
+    PLANS_REQUEST_ENDPOINT.GET_ALL.URL
+  );
+  const [todayUsers, setTodayUsers] = useState(0);
+  const [totalListingTime, setTotalListingTime] = useState(0);
+  const [prevMonthUsersPer, setPrevMonthUsersPer] = useState("0%");
+  const [totalUsers, setTotalUser] = useState(0);
+  const [totalReqThisWeek, setTotalReqThisWeek] = useState(0);
+  const [totalReqLastWeek, setTotalLastWeek] = useState(0);
+
+  useEffect(() => {
+    if (!userLoading && Array(data).length && !userError) {
+      const prevMonth = [];
+      const thisMonth = [];
+      let totalListingTime = 0;
+      data.forEach((user) => {
+        totalListingTime += user.totalListenTime;
+        if (dayjs(user.createdAt).isSame(dayjs(), "month")) thisMonth.push(user);
+        if (dayjs(user.createdAt).isSame(dayjs().subtract(1, "month"), "month"))
+          prevMonth.push(user);
+      });
+      setTotalListingTime(`${(totalListingTime / 3600).toFixed(2)} hrs`);
+      setTodayUsers(thisMonth.length);
+      setTotalUser(data.length);
+      console.log(thisMonth.length, prevMonth.length);
+      const growthRate = ((thisMonth.length - prevMonth.length) / prevMonth.length) * 100;
+      setPrevMonthUsersPer(`${growthRate == Infinity ? 0 : growthRate.toFixed(2)}%`);
+    }
+    console.log("userError", userError);
+  }, [userLoading, data]);
+
+  useEffect(() => {
+    if (!planReqLoading && Array(planReq).length) {
+      const thisWeekReq = [];
+      const lastWeekReq = [];
+      planReq.forEach((plan) => {
+        if (dayjs(plan.createdAt).isSame(dayjs(), "week")) thisWeekReq.push(plan);
+        if (dayjs(plan.createdAt).isSame(dayjs().subtract(1, "week"), "week"))
+          lastWeekReq.push(plan);
+      });
+      const growthRate = ((thisWeekReq.length - lastWeekReq.length) / lastWeekReq.length) * 100;
+      setTotalReqThisWeek(thisWeekReq.length);
+      setTotalLastWeek(`${growthRate == Infinity ? 0 : growthRate.toFixed(2)}%`);
+    }
+  }, [planReqLoading, planReq]);
 
   return (
     <DashboardLayout>
@@ -48,11 +87,11 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="dark"
                 icon="weekend"
-                title="Bookings"
-                count={281}
+                title="Plan Requests"
+                count={totalReqThisWeek}
                 percentage={{
-                  color: "success",
-                  amount: "+55%",
+                  color: parseInt(totalReqLastWeek) >= 0 ? "success" : "error",
+                  amount: totalReqLastWeek,
                   label: "than lask week",
                 }}
               />
@@ -62,11 +101,11 @@ function Dashboard() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 icon="leaderboard"
-                title="Today's Users"
-                count="2,300"
+                title="This Months's Users"
+                count={todayUsers}
                 percentage={{
-                  color: "success",
-                  amount: "+3%",
+                  color: parseInt(prevMonthUsersPer) >= 0 ? "success" : "error",
+                  amount: prevMonthUsersPer,
                   label: "than last month",
                 }}
               />
@@ -77,12 +116,12 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="success"
                 icon="store"
-                title="Revenue"
-                count="34k"
+                title="Total Listing Time"
+                count={totalListingTime}
                 percentage={{
                   color: "success",
-                  amount: "+1%",
-                  label: "than yesterday",
+                  // amount: "total listing time of users in hours",
+                  label: "Total listing time of users in hours",
                 }}
               />
             </MDBox>
@@ -92,8 +131,8 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="primary"
                 icon="person_add"
-                title="Followers"
-                count="+91"
+                title="Total Users"
+                count={totalUsers}
                 percentage={{
                   color: "success",
                   amount: "",

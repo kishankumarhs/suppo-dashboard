@@ -188,9 +188,9 @@ export const usePatchRequestLazy = (URL) => {
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
 
-  const lazyRequest = useCallback((payload) => {
+  const lazyRequest = useCallback(async (payload) => {
     setLoading(true);
-    patchRequest(URL, payload)
+    await patchRequest(URL, payload)
       .then((response) => {
         setData(response.data);
       })
@@ -258,7 +258,7 @@ export const useDeleteRequestLazy = (URL) => {
 
   const lazyRequest = useCallback(() => {
     setLoading(true);
-    patchRequest(URL)
+    deleteRequest(URL)
       .then((response) => {
         setData(response.data);
       })

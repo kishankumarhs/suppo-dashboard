@@ -1,4 +1,3 @@
-
 /**
  * Endpoints for users
  * @typedef {Object} USERS_ENDPOINT
@@ -50,54 +49,69 @@ export const PLANS_ENDPOINT = {
 export const PLANS_REQUEST_ENDPOINT = {
   GET_ALL: {
     METHOD: "GET",
-    URL: "plans-request",
+    URL: "plan-request",
   },
   GET_ONE: {
     METHOD: "GET",
-    URL: (id) => `plans-request/${id}`,
+    URL: (id) => `plan-request/${id}`,
   },
 };
 
 export const SONGS_ENDPOINT = {
   GET_ALL: {
     METHOD: "GET",
-    URL: 'songs'
+    URL: "songs",
   },
   CREATE: {
     METHOD: "POST",
-    URL: "songs"
+    URL: "songs",
+  },
+  DELETE: {
+    METHOD: "POST",
+    URL: "songs",
   },
   GET_ONE: {
     METHOD: "GET",
-    URL: (id) => `songs/${id}`
+    URL: (id) => `songs/${id}`,
   },
-}
+};
 export const PLAYLIST_ENDPOINT = {
   GET_ALL: {
     METHOD: "GET",
-    URL: 'playlist'
+    URL: "playlist",
   },
   CREATE: {
     METHOD: "POST",
-    URL: "playlist"
+    URL: "playlist",
+  },
+  DELETE: {
+    METHOD: "POST",
+    URL: "playlist",
   },
   GET_ONE: {
     METHOD: "GET",
-    URL: (id) => `/playlist/${id}`
+    URL: (id) => `/playlist/${id}`,
   },
-}
+};
 
 export const BANNERS_ENDPOINT = {
   GET_ALL: {
     METHOD: "GET",
-    URL: 'banners'
+    URL: "banners",
   },
   CREATE: {
     METHOD: "POST",
-    URL: "banners"
+    URL: "banners",
   },
   GET_ONE: {
     METHOD: "GET",
-    URL: (id) => `/banners/${id}`
+    URL: (id) => `/banners/${id}`,
   },
-}
+};
+
+export const AUTH_ENDPOINT = {
+  LOGIN: {
+    METHOD: "POST",
+    URL: "login",
+  },
+};

@@ -20,6 +20,7 @@ import { CircularProgress, Icon, Modal, Stack, TextField } from "@mui/material";
 import MDButton from "components/MDButton";
 import { PLAYLIST_ENDPOINT } from "utils/axios.apis";
 import { usePostRequestLazy } from "utils/axiosHooks";
+import { useDeleteRequestLazy } from "utils/axiosHooks";
 
 function Songs() {
   const { data, loading, error, refetch } = useGetRequest(SONGS_ENDPOINT.GET_ALL.URL);
@@ -30,6 +31,12 @@ function Songs() {
     refetch: playlistRefetch,
   } = useGetRequest(PLAYLIST_ENDPOINT.GET_ALL.URL);
   const [saveSongs, { loading: songSaveLoading }] = usePostRequestLazy(SONGS_ENDPOINT.CREATE.URL);
+  const [deleteSong, { loading: songDeleteLoading }] = useDeleteRequestLazy(
+    SONGS_ENDPOINT.DELETE.URL
+  );
+  const [deletePlaylist, { loading: playlistDeleteLoading }] = useDeleteRequestLazy(
+    PLAYLIST_ENDPOINT.DELETE.URL
+  );
   const [savePlaylist, { loading: playlistSaveLoading }] = usePostRequestLazy(
     PLAYLIST_ENDPOINT.CREATE.URL
   );
@@ -37,7 +44,9 @@ function Songs() {
   const { columns: playlistColumns, rows: playlistRows } = playlistTableData(
     playlist,
     playlistLoading,
-    playlistGetError
+    playlistGetError,
+    deletePlaylist,
+    playlistRefetch
   );
   const [playlistOpen, setPlaylistOpen] = useState(false);
   const handlePlaylistOpen = () => setPlaylistOpen(true);

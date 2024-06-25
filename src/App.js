@@ -52,6 +52,7 @@ import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "co
 // Images
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
+import { ProtectedRoutes } from "ProtectedRoutes";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -114,11 +115,27 @@ export default function App() {
       if (route.collapse) {
         return getRoutes(route.collapse);
       }
-
-      if (route.route) {
+      if (route.protected) {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          return (
+            <Route
+              path={route.route}
+              element={<Navigate to="/authentication/sign-in" />}
+              key={route.key}
+            />
+          );
+        }
+        if (route.route) {
+          return (
+            <Route key={route.key} element={<ProtectedRoutes />}>
+              <Route exact path={route.route} element={route.component} key={route.key} />
+            </Route>
+          );
+        }
+      } else if (route.route) {
         return <Route exact path={route.route} element={route.component} key={route.key} />;
       }
-
       return null;
     });
 

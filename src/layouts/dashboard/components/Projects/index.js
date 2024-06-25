@@ -1,19 +1,4 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -29,14 +14,32 @@ import MDTypography from "components/MDTypography";
 import DataTable from "examples/Tables/DataTable";
 
 // Data
-import data from "layouts/dashboard/components/Projects/data";
+import planData from "layouts/dashboard/components/Projects/data";
+import { useGetRequest } from "utils/axiosHooks";
+import { PLANS_REQUEST_ENDPOINT } from "utils/axios.apis";
+import dayjs from "dayjs";
 
 function Projects() {
-  const { columns, rows } = data();
   const [menu, setMenu] = useState(null);
-
+  const { data, loading, error } = useGetRequest(PLANS_REQUEST_ENDPOINT.GET_ALL.URL);
+  const { columns, rows } = planData(data, loading, error);
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
+  const [thisMonth, setThisMonth] = useState(0);
+
+  useEffect(() => {
+    if (!loading && Array(data).length && !error) {
+      const thisMonth = [];
+      const prevMonth = [];
+      data.forEach((plan) => {
+        if (dayjs(plan.createdAt).isSame(dayjs(), "month")) thisMonth.push(plan);
+        if (dayjs(plan.createdAt).isSame(dayjs().subtract(1, "month"), "month"))
+          prevMonth.push(plan);
+      });
+      const growthRate = ((thisMonth.length - prevMonth.length) / prevMonth.length) * 100;
+      setThisMonth(`${growthRate == Infinity ? 0 : growthRate.toFixed(2)}%`);
+    }
+  }, [loading, data, error]);
 
   const renderMenu = (
     <Menu
@@ -64,7 +67,7 @@ function Projects() {
       <MDBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
         <MDBox>
           <MDTypography variant="h6" gutterBottom>
-            Projects
+            Plan Request
           </MDTypography>
           <MDBox display="flex" alignItems="center" lineHeight={0}>
             <Icon
@@ -77,16 +80,16 @@ function Projects() {
               done
             </Icon>
             <MDTypography variant="button" fontWeight="regular" color="text">
-              &nbsp;<strong>30 done</strong> this month
+              &nbsp;<strong>{thisMonth}</strong> this month
             </MDTypography>
           </MDBox>
         </MDBox>
-        <MDBox color="text" px={2}>
+        {/* <MDBox color="text" px={2}>
           <Icon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" onClick={openMenu}>
             more_vert
           </Icon>
-        </MDBox>
-        {renderMenu}
+        </MDBox> */}
+        {/* {renderMenu} */}
       </MDBox>
       <MDBox>
         <DataTable

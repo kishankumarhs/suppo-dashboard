@@ -21,14 +21,6 @@ import { Link } from "react-router-dom";
 // @mui material components
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
-import Grid from "@mui/material/Grid";
-import MuiLink from "@mui/material/Link";
-
-// @mui icons
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import GoogleIcon from "@mui/icons-material/Google";
-
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -40,12 +32,53 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
+import { usePostRequestLazy } from "utils/axiosHooks";
+import { AUTH_ENDPOINT } from "utils/axios.apis";
+import { CircularProgress } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function Basic() {
   const [rememberMe, setRememberMe] = useState(false);
+  const [singIn, { data, loading, error }] = usePostRequestLazy(AUTH_ENDPOINT.LOGIN.URL);
+  const [authentication, setAuthentication] = useState({
+    email: "",
+    password: "",
+  });
+  const [authenticationError, setAuthenticationError] = useState({
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+  const handleChange = (e) => {
+    e.preventDefault();
+    setAuthentication((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    validate({ ...authentication, [e.target.name]: e.target.value });
+  };
+  const validate = (values) => {
+    const errors = {};
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$/.test(values.email)) {
+      errors.email = "invalid email";
+    } else errors.email = "";
+    setAuthenticationError((prev) => ({ ...prev, ...errors }));
+  };
 
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    if (Object.values(authenticationError).filter((f) => f !== "").length > 0) return;
+    await singIn({
+      ...authentication,
+    });
+    if (error)
+      setAuthenticationError({
+        error: error.message,
+      });
+    if (data) {
+      localStorage.setItem("token", data?.access_token);
+      navigate("/");
+    }
+  };
   return (
     <BasicLayout image={bgImage}>
       <Card>
@@ -63,31 +96,32 @@ function Basic() {
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
             Sign in
           </MDTypography>
-          <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
-            <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <FacebookIcon color="inherit" />
-              </MDTypography>
-            </Grid>
-            <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <GitHubIcon color="inherit" />
-              </MDTypography>
-            </Grid>
-            <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <GoogleIcon color="inherit" />
-              </MDTypography>
-            </Grid>
-          </Grid>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form">
+          <MDBox>
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" fullWidth />
+              <MDInput
+                onChange={handleChange}
+                error={!!authenticationError.email}
+                value={authentication.email}
+                helperText={authenticationError.email}
+                name="email"
+                type="email"
+                label="Email"
+                fullWidth
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="Password" fullWidth />
+              <MDInput
+                error={!!authenticationError.password}
+                helperText={authenticationError.password}
+                value={authentication.password}
+                name="password"
+                onChange={handleChange}
+                type="password"
+                label="Password"
+                fullWidth
+              />
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -102,8 +136,8 @@ function Basic() {
               </MDTypography>
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
-                sign in
+              <MDButton onClick={handleSignIn} variant="gradient" color="info" fullWidth>
+                {loading ? <CircularProgress size={16} /> : "sign in"}
               </MDButton>
             </MDBox>
             <MDBox mt={3} mb={1} textAlign="center">
