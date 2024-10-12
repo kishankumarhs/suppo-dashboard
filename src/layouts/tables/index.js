@@ -14,14 +14,13 @@ import DataTable from "examples/Tables/DataTable";
 
 // Data
 import authorsTableData from "layouts/tables/data/authorsTableData";
-import projectsTableData from "layouts/tables/data/projectsTableData";
 import { useGetRequest } from "utils/axiosHooks";
 import { USERS_ENDPOINT } from "utils/axios.apis";
 
 function Tables() {
-  const { data, loading, error } = useGetRequest(USERS_ENDPOINT.GET_ALL.URL)
+  const { data, loading, error } = useGetRequest(USERS_ENDPOINT.GET_ALL.URL);
   const { columns, rows } = authorsTableData(data, loading, error);
-  // const { columns: pColumns, rows: pRows } = projectsTableData();
+
   return (
     <DashboardLayout>
       <DashboardNavbar />

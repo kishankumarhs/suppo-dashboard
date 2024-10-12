@@ -32,7 +32,7 @@ export const useGetRequest = (URL) => {
   return {
     loading,
     error,
-    data,
+    data: error !== null || data === null ? [] : data,
     refetch: () => setRefetch((prev) => !prev),
   };
 };
@@ -75,7 +75,7 @@ export const useGetRequestLazy = (URL) => {
     {
       loading,
       error,
-      data,
+      data: error !== null || data === null ? [] : data,
     },
   ];
 };
@@ -107,7 +107,7 @@ export const usePostRequest = (URL, payload) => {
   return {
     loading,
     error,
-    data,
+    data: error !== null || data === null ? [] : data,
   };
 };
 
@@ -141,7 +141,7 @@ export const usePostRequestLazy = (URL) => {
     {
       loading,
       error,
-      data,
+      data: error !== null || data === null ? [] : data,
     },
   ];
 };
@@ -173,7 +173,7 @@ export const usePatchRequest = (URL, payload) => {
   return {
     loading,
     error,
-    data,
+    data: error !== null || data === null ? [] : data,
   };
 };
 
@@ -207,7 +207,7 @@ export const usePatchRequestLazy = (URL) => {
     {
       loading,
       error,
-      data,
+      data: error !== null || data === null ? [] : data,
     },
   ];
 };
@@ -241,7 +241,7 @@ export const useDeleteRequest = (URL) => {
   return {
     loading,
     error,
-    data,
+    data: error !== null || data === null ? [] : data,
   };
 };
 
@@ -256,9 +256,9 @@ export const useDeleteRequestLazy = (URL) => {
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
 
-  const lazyRequest = useCallback(() => {
+  const lazyRequest = useCallback((id) => {
     setLoading(true);
-    deleteRequest(URL)
+    deleteRequest(URL, id)
       .then((response) => {
         setData(response.data);
       })
@@ -275,7 +275,7 @@ export const useDeleteRequestLazy = (URL) => {
     {
       loading,
       error,
-      data,
+      data: error !== null || data === null ? [] : data,
     },
   ];
 };
@@ -290,8 +290,8 @@ export async function patchRequest(URL, payload) {
   return response;
 }
 
-export async function deleteRequest(URL) {
-  const response = await axiosClient.delete(`/${URL}`);
+export async function deleteRequest(URL, id) {
+  const response = await axiosClient.delete(`/${URL}/${id}`);
   return response;
 }
 

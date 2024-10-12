@@ -25,7 +25,7 @@ import dayjs from "dayjs";
 export default function data(data, loading, error) {
   const hello =
     data?.length && !error && !loading
-      ? data.map((plan) => ({
+      ? data?.map((plan) => ({
           plan: (
             <MDTypography variant="caption" color="text" fontWeight="medium">
               {plan.plan[0]?.title}
@@ -51,14 +51,14 @@ export default function data(data, loading, error) {
                   },
                 }}
               >
-                {plan.users?.[0].full_name[0].toUpperCase()}
+                {plan.users?.[0]?.full_name[0].toUpperCase()}
               </Avatar>
               <Stack direction="column" height={"100%"} ml={1}>
                 <MDTypography variant="caption" color="text" fontWeight="medium">
-                  {plan.users?.[0].full_name}
+                  {plan.users?.[0]?.full_name}
                 </MDTypography>
                 <MDTypography variant="caption" color="text">
-                  {plan.users?.[0].email}
+                  {plan.users?.[0]?.email}
                 </MDTypography>
               </Stack>
             </MDBox>

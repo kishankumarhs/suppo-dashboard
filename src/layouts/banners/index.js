@@ -20,11 +20,21 @@ import { useState } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { useDeleteRequestLazy } from "utils/axiosHooks";
 
 function Banners() {
   const { data, loading, error, refetch } = useGetRequest(BANNERS_ENDPOINT.GET_ALL.URL);
   const [saveBanner, { loading: saveLoading }] = usePostRequestLazy(BANNERS_ENDPOINT.CREATE.URL);
-  const { columns: songsColumns, rows: songsRows } = bannersTableData(data, loading, error);
+  const [deleteBanner, { loading: deletingBannerLoading }] = useDeleteRequestLazy(
+    BANNERS_ENDPOINT.DELETE.URL
+  );
+  const { columns: songsColumns, rows: songsRows } = bannersTableData(
+    data,
+    loading,
+    error,
+    deleteBanner,
+    refetch
+  );
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

@@ -1,7 +1,7 @@
 import { Icon, IconButton } from "@mui/material";
 import { ImageThumbnail } from "./styles";
 
-export default function (data, loading, error) {
+export default function (data, loading, error, deleteFun, refetch) {
   const columns = [
     { Header: "image", accessor: "image", width: "30%", align: "left" },
     { Header: "name", accessor: "name", width: "10%", align: "left" },
@@ -23,6 +23,10 @@ export default function (data, loading, error) {
                 sx={{
                   color: "error.main",
                   fontSize: 20,
+                }}
+                onClick={async () => {
+                  await deleteFun(banner._id);
+                  await refetch();
                 }}
               >
                 delete

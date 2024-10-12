@@ -25,7 +25,7 @@ import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 function Dashboard() {
-  const { sales, tasks } = reportsLineChartData;
+  // const { sales, tasks } = reportsLineChartData;
   const {
     data,
     loading: userLoading,
@@ -46,7 +46,7 @@ function Dashboard() {
       const prevMonth = [];
       const thisMonth = [];
       let totalListingTime = 0;
-      data.forEach((user) => {
+      data?.forEach((user) => {
         totalListingTime += user.totalListenTime;
         if (dayjs(user.createdAt).isSame(dayjs(), "month")) thisMonth.push(user);
         if (dayjs(user.createdAt).isSame(dayjs().subtract(1, "month"), "month"))
@@ -66,7 +66,7 @@ function Dashboard() {
     if (!planReqLoading && Array(planReq).length) {
       const thisWeekReq = [];
       const lastWeekReq = [];
-      planReq.forEach((plan) => {
+      planReq?.forEach((plan) => {
         if (dayjs(plan.createdAt).isSame(dayjs(), "week")) thisWeekReq.push(plan);
         if (dayjs(plan.createdAt).isSame(dayjs().subtract(1, "week"), "week"))
           lastWeekReq.push(plan);
@@ -142,7 +142,7 @@ function Dashboard() {
             </MDBox>
           </Grid>
         </Grid>
-        <MDBox mt={4.5}>
+        {/* <MDBox mt={4.5}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={4}>
               <MDBox mb={3}>
@@ -182,7 +182,7 @@ function Dashboard() {
               </MDBox>
             </Grid>
           </Grid>
-        </MDBox>
+        </MDBox> */}
         <MDBox>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={8}>

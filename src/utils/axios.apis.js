@@ -90,7 +90,7 @@ export const PLAYLIST_ENDPOINT = {
   },
   GET_ONE: {
     METHOD: "GET",
-    URL: (id) => `/playlist/${id}`,
+    URL: `/playlist`,
   },
 };
 
@@ -105,7 +105,11 @@ export const BANNERS_ENDPOINT = {
   },
   GET_ONE: {
     METHOD: "GET",
-    URL: (id) => `/banners/${id}`,
+    URL: `/banners`,
+  },
+  DELETE: {
+    METHOD: "GET",
+    URL: `/banners`,
   },
 };
 

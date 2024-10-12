@@ -20,18 +20,15 @@ import { PLANS_REQUEST_ENDPOINT } from "utils/axios.apis";
 import dayjs from "dayjs";
 
 function Projects() {
-  const [menu, setMenu] = useState(null);
   const { data, loading, error } = useGetRequest(PLANS_REQUEST_ENDPOINT.GET_ALL.URL);
   const { columns, rows } = planData(data, loading, error);
-  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
-  const closeMenu = () => setMenu(null);
   const [thisMonth, setThisMonth] = useState(0);
 
   useEffect(() => {
     if (!loading && Array(data).length && !error) {
       const thisMonth = [];
       const prevMonth = [];
-      data.forEach((plan) => {
+      data?.forEach((plan) => {
         if (dayjs(plan.createdAt).isSame(dayjs(), "month")) thisMonth.push(plan);
         if (dayjs(plan.createdAt).isSame(dayjs().subtract(1, "month"), "month"))
           prevMonth.push(plan);
@@ -40,27 +37,6 @@ function Projects() {
       setThisMonth(`${growthRate == Infinity ? 0 : growthRate.toFixed(2)}%`);
     }
   }, [loading, data, error]);
-
-  const renderMenu = (
-    <Menu
-      id="simple-menu"
-      anchorEl={menu}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "left",
-      }}
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={Boolean(menu)}
-      onClose={closeMenu}
-    >
-      <MenuItem onClick={closeMenu}>Action</MenuItem>
-      <MenuItem onClick={closeMenu}>Another action</MenuItem>
-      <MenuItem onClick={closeMenu}>Something else</MenuItem>
-    </Menu>
-  );
 
   return (
     <Card>

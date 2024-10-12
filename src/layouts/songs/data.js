@@ -61,7 +61,7 @@ export const playlistTableData = function (data, loading, error, deleteFun, refe
 
   const rows =
     !loading && data && !error
-      ? data.data.map((song) => ({
+      ? data?.data?.map((song) => ({
           id: song._id,
           name: song.title,
           playlist: song.playlist_id,

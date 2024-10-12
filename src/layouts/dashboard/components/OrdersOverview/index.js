@@ -14,6 +14,7 @@ Coded by www.creative-tim.com
 */
 
 // @mui material components
+import { List, ListItem } from "@mui/material";
 import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
 
@@ -29,7 +30,7 @@ function OrdersOverview() {
     <Card sx={{ height: "100%" }}>
       <MDBox pt={3} px={3}>
         <MDTypography variant="h6" fontWeight="medium">
-          Orders overview
+          Payout Requests
         </MDTypography>
         <MDBox mt={0} mb={2}>
           <MDTypography variant="button" color="text" fontWeight="regular">
@@ -45,7 +46,14 @@ function OrdersOverview() {
         </MDBox>
       </MDBox>
       <MDBox p={2}>
-        <TimelineItem
+        <List>
+          {Array(2)
+            .fill(2)
+            .map((item, index) => (
+              <ListItem key={item}>{item}</ListItem>
+            ))}
+        </List>
+        {/* <TimelineItem
           color="success"
           icon="notifications"
           title="$2400, Design changes"
@@ -75,7 +83,7 @@ function OrdersOverview() {
           title="New card added for order #4395133"
           dateTime="18 DEC 4:54 AM"
           lastItem
-        />
+        /> */}
       </MDBox>
     </Card>
   );
