@@ -11,7 +11,6 @@ const token = localStorage.getItem("token");
 axiosClient.defaults.headers = {
   "Content-Type": "application/json",
   Accept: "application/json",
-  "Access-Control-Allow-Origin": "*",
   authorization: `Bearer ${token}`,
 };
 
