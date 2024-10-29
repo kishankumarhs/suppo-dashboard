@@ -122,18 +122,24 @@ export const usePostRequestLazy = (URL) => {
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
 
-  const lazyRequest = useCallback((payload) => {
-    setLoading(true);
-    postRequest(URL, payload)
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch((error) => {
-        setError(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  const lazyRequest = useCallback(async (payload) => {
+    let loading = true,
+      data = null,
+      error = null;
+    try {
+      setLoading(true);
+      const res = await postRequest(URL, payload);
+      console.log("post lazy request", res);
+      data = res.data;
+      setData(res.data);
+    } catch (error) {
+      setError(error);
+      error = error;
+    } finally {
+      setLoading(false);
+      loading = false;
+    }
+    return { data, loading, error };
   }, []);
 
   return [

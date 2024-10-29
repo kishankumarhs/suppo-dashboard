@@ -59,35 +59,15 @@ export default function data(data, loading, error) {
     loading && !data.length
       ? [
           {
-            name: <Skeleton />,
-            address: <Job title="Manager" description="Organization" />,
+            name: <Skeleton variant="text" />,
+            address: <Skeleton variant="text" />,
             status: (
               <MDBox ml={-1}>
-                <MDBadge badgeContent="online" color="success" variant="gradient" size="sm" />
+                <Skeleton variant="text" />
               </MDBox>
             ),
-            employed: (
-              <MDTypography
-                component="a"
-                href="#"
-                variant="caption"
-                color="text"
-                fontWeight="medium"
-              >
-                23/04/18
-              </MDTypography>
-            ),
-            action: (
-              <MDTypography
-                component="a"
-                href="#"
-                variant="caption"
-                color="text"
-                fontWeight="medium"
-              >
-                Edit
-              </MDTypography>
-            ),
+            employed: <Skeleton variant="text" />,
+            action: <Skeleton variant="rounded" />,
           },
         ]
       : data?.map((item) => ({

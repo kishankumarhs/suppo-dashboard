@@ -33,8 +33,9 @@ function Projects() {
         if (dayjs(plan.createdAt).isSame(dayjs().subtract(1, "month"), "month"))
           prevMonth.push(plan);
       });
+      console.log("Previous Mount", thisMonth, prevMonth);
       const growthRate = ((thisMonth.length - prevMonth.length) / prevMonth.length) * 100;
-      setThisMonth(`${growthRate == Infinity ? 0 : growthRate.toFixed(2)}%`);
+      setThisMonth(`${growthRate == null || isNaN(growthRate) ? 0 : growthRate.toFixed(2)}%`);
     }
   }, [loading, data, error]);
 
@@ -68,13 +69,21 @@ function Projects() {
         {/* {renderMenu} */}
       </MDBox>
       <MDBox>
-        <DataTable
-          table={{ columns, rows }}
-          showTotalEntries={false}
-          isSorted={false}
-          noEndBorder
-          entriesPerPage={false}
-        />
+        {!data?.length ? (
+          <MDBox p={2} minHeight={300} display="grid" sx={{ placeItems: "center" }}>
+            <MDTypography variant="button" fontWeight="bold" color="text">
+              No data found
+            </MDTypography>
+          </MDBox>
+        ) : (
+          <DataTable
+            table={{ columns, rows }}
+            showTotalEntries={false}
+            isSorted={false}
+            noEndBorder
+            entriesPerPage={false}
+          />
+        )}
       </MDBox>
     </Card>
   );

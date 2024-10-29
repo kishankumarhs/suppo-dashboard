@@ -14,6 +14,7 @@ Coded by www.creative-tim.com
 */
 
 // @mui material components
+import { Link } from "@mui/material";
 import Card from "@mui/material/Card";
 // import Divider from "@mui/material/Divider";
 import Icon from "@mui/material/Icon";
@@ -21,28 +22,24 @@ import Icon from "@mui/material/Icon";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
+import dayjs from "dayjs";
 // import MDButton from "components/MDButton";
 
 // Billing page components
 import Transaction from "layouts/billing/components/Transaction";
+import { PAYOUT_ENDPOINT } from "utils/axios.apis";
+import { useGetRequest } from "utils/axiosHooks";
 
 function Transactions() {
+  const { data, loading, error } = useGetRequest(
+    `${PAYOUT_ENDPOINT.GET_ALL_PAYOUTS.URL}?limit=20&sort=createdAt`
+  );
   return (
     <Card sx={{ height: "100%" }}>
       <MDBox display="flex" justifyContent="space-between" alignItems="center" pt={3} px={2}>
         <MDTypography variant="h6" fontWeight="medium" textTransform="capitalize">
           Your Transaction&apos;s
         </MDTypography>
-        <MDBox display="flex" alignItems="flex-start">
-          <MDBox color="text" mr={0.5} lineHeight={0}>
-            <Icon color="inherit" fontSize="small">
-              date_range
-            </Icon>
-          </MDBox>
-          <MDTypography variant="button" color="text" fontWeight="regular">
-            23 - 30 March 2020
-          </MDTypography>
-        </MDBox>
       </MDBox>
       <MDBox pt={3} pb={2} px={2}>
         <MDBox mb={2}>
@@ -58,24 +55,41 @@ function Transactions() {
           m={0}
           sx={{ listStyle: "none" }}
         >
-          <Transaction
-            color="error"
-            icon="expand_more"
-            name="Netflix"
-            description="27 March 2020, at 12:30 PM"
-            value="- $ 2,500"
-          />
-          <Transaction
+          {!loading && error == null
+            ? data
+                .filter((ele) => dayjs(ele.createdAt).isSame(dayjs(), "day"))
+                .map((item) => {
+                  return (
+                    <Link key={item._id} href="/payouts">
+                      <Transaction
+                        color="success"
+                        icon="expand_more"
+                        name={item.requestedBy.full_name}
+                        description={Intl.DateTimeFormat("en", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        }).format(new Date(item.requestTime))}
+                        value={`${item.convertedAmount.toFixed(2)} EUR`}
+                      />
+                    </Link>
+                  );
+                })
+            : "No data found"}
+
+          {/* <Transaction
             color="success"
             icon="expand_less"
             name="Apple"
             description="27 March 2020, at 04:30 AM"
             value="+ $ 2,000"
-          />
+          /> */}
         </MDBox>
         <MDBox mt={1} mb={2}>
           <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase">
-            yesterday
+            yesterday or behind
           </MDTypography>
         </MDBox>
         <MDBox
@@ -86,34 +100,30 @@ function Transactions() {
           m={0}
           sx={{ listStyle: "none" }}
         >
-          <Transaction
-            color="success"
-            icon="expand_less"
-            name="Stripe"
-            description="26 March 2020, at 13:45 PM"
-            value="+ $ 750"
-          />
-          <Transaction
-            color="success"
-            icon="expand_less"
-            name="HubSpot"
-            description="26 March 2020, at 12:30 PM"
-            value="+ $ 1,000"
-          />
-          <Transaction
-            color="success"
-            icon="expand_less"
-            name="Creative Tim"
-            description="26 March 2020, at 08:30 AM"
-            value="+ $ 2,500"
-          />
-          <Transaction
-            color="dark"
-            icon="priority_high"
-            name="Webflow"
-            description="26 March 2020, at 05:00 AM"
-            value="Pending"
-          />
+          {!loading && error == null
+            ? data
+                .filter((ele) => dayjs(ele.createdAt).isSame(dayjs().subtract(1, "day"), "day"))
+                .map((item) => {
+                  return (
+                    <Link key={item._id} href="/payouts">
+                      <Transaction
+                        key={item._id}
+                        color="success"
+                        icon="expand_more"
+                        name={item.requestedBy.full_name}
+                        description={Intl.DateTimeFormat("en", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        }).format(new Date(item.requestTime))}
+                        value={`${item.convertedAmount.toFixed(2)} EUR`}
+                      />
+                    </Link>
+                  );
+                })
+            : "No data found"}
         </MDBox>
       </MDBox>
     </Card>

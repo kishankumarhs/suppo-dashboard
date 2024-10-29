@@ -47,6 +47,10 @@ import {
   setSidenavColor,
   setDarkMode,
 } from "context";
+import { Stack, TextField } from "@mui/material";
+import { useGetRequest } from "utils/axiosHooks";
+import { APPLICATION_CONFIG_ENDPOINT } from "utils/axios.apis";
+import { usePostRequestLazy } from "utils/axiosHooks";
 
 function Configurator() {
   const [controller, dispatch] = useMaterialUIController();
@@ -60,6 +64,22 @@ function Configurator() {
   } = controller;
   const [disabled, setDisabled] = useState(false);
   const sidenavColors = ["primary", "dark", "info", "success", "warning", "error"];
+  const [formData, setFormData] = useState({
+    minimumAmount: 0,
+    convertAmount: 0,
+  });
+  const { data, loading } = useGetRequest(APPLICATION_CONFIG_ENDPOINT.GET_ALL_CONFIG.URL);
+  const [updateConfig, { loading: saveLoading }] = usePostRequestLazy(
+    APPLICATION_CONFIG_ENDPOINT.UPDATE.URL
+  );
+  useEffect(() => {
+    if (data && !loading) {
+      setFormData({
+        minimumAmount: data.miniumPayoutAmount,
+        convertAmount: data.suppoToMoneyValue,
+      });
+    }
+  }, [loading, data]);
 
   // Use the useEffect hook to change the button state for the sidenav type based on window size.
   useEffect(() => {
@@ -127,6 +147,30 @@ function Configurator() {
     },
   });
 
+  const saveApplicationConfig = async () => {
+    try {
+      const { data, loading, error } = await updateConfig({
+        miniumPayoutAmount: formData.minimumAmount,
+        suppoToMoneyValue: formData.convertAmount,
+      });
+      setFormData({
+        convertAmount: data.suppoToMoneyValue,
+        minimumAmount: data.miniumPayoutAmount,
+      });
+      console.log("Save Config", data, loading, error);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   return (
     <ConfiguratorRoot variant="permanent" ownerState={{ openConfigurator }}>
       <MDBox
@@ -138,7 +182,7 @@ function Configurator() {
         px={3}
       >
         <MDBox>
-          <MDTypography variant="h5">Material UI Configurator</MDTypography>
+          <MDTypography variant="h5">UI Configurator</MDTypography>
           <MDTypography variant="body2" color="text">
             See our dashboard options.
           </MDTypography>
@@ -162,6 +206,33 @@ function Configurator() {
       <Divider />
 
       <MDBox pt={0.5} pb={3} px={3}>
+        <MDBox>
+          <MDTypography variant="h6">Application Configuration</MDTypography>
+
+          <MDBox mb={0.5} py={2}>
+            <Stack spacing={3}>
+              <TextField
+                value={formData.minimumAmount}
+                label="Minimum Payout"
+                type="number"
+                name="minimumAmount"
+                onChange={handleChange}
+                variant="outlined"
+              ></TextField>
+              <TextField
+                value={formData.convertAmount}
+                label="Suppo Convert"
+                type="number"
+                name="convertAmount"
+                onChange={handleChange}
+                variant="outlined"
+              ></TextField>
+              <MDButton onClick={saveApplicationConfig} color={"dark"} variant="contained">
+                {saveLoading ? "loading" : "Save"}
+              </MDButton>
+            </Stack>
+          </MDBox>
+        </MDBox>
         <MDBox>
           <MDTypography variant="h6">Sidenav Colors</MDTypography>
 

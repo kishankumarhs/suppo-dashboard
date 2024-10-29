@@ -110,22 +110,22 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
-  const getRoutes = (allRoutes) =>
-    allRoutes.map((route) => {
+  const getRoutes = (allRoutes) => {
+    return allRoutes.map((route) => {
       if (route.collapse) {
         return getRoutes(route.collapse);
       }
       if (route.protected) {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          return (
-            <Route
-              path={route.route}
-              element={<Navigate to="/authentication/sign-in" />}
-              key={route.key}
-            />
-          );
-        }
+        // const token = localStorage.getItem("token");
+        // if (!token) {
+        //   return (
+        //     <Route
+        //       path={route.route}
+        //       element={<Navigate to="/authentication/sign-in" />}
+        //       key={route.key}
+        //     />
+        //   );
+        // }
         if (route.route) {
           return (
             <Route key={route.key} element={<ProtectedRoutes />}>
@@ -138,6 +138,7 @@ export default function App() {
       }
       return null;
     });
+  };
 
   const configsButton = (
     <MDBox

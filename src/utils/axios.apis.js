@@ -108,8 +108,8 @@ export const BANNERS_ENDPOINT = {
     URL: `/banners`,
   },
   DELETE: {
-    METHOD: "GET",
-    URL: `/banners`,
+    METHOD: "DELETE",
+    URL: `banners`,
   },
 };
 
@@ -117,5 +117,22 @@ export const AUTH_ENDPOINT = {
   LOGIN: {
     METHOD: "POST",
     URL: "login",
+  },
+};
+
+export const PAYOUT_ENDPOINT = {
+  GET_ALL_PAYOUTS: {
+    METHOD: "POST",
+    URL: "payouts/get-all-payouts",
+  },
+};
+export const APPLICATION_CONFIG_ENDPOINT = {
+  GET_ALL_CONFIG: {
+    METHOD: "GET",
+    URL: "payouts/get-config",
+  },
+  UPDATE: {
+    METHOD: "POST",
+    URL: "payouts/update-config",
   },
 };

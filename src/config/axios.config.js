@@ -2,10 +2,7 @@ import axios from "axios";
 
 const axiosClient = axios.create();
 
-axiosClient.defaults.baseURL =
-  process.env.NODE_ENV == "production" || process.env.NODE_ENV == "staging"
-    ? process.env.REACT_APP_URL
-    : "http://49.13.72.88:3000/";
+axiosClient.defaults.baseURL = process.env.REACT_APP_URL || "http://49.13.72.88:3000/";
 
 const token = localStorage.getItem("token");
 axiosClient.defaults.headers = {

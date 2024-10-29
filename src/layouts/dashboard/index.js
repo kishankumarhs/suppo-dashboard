@@ -57,7 +57,9 @@ function Dashboard() {
       setTotalUser(data.length);
       console.log(thisMonth.length, prevMonth.length);
       const growthRate = ((thisMonth.length - prevMonth.length) / prevMonth.length) * 100;
-      setPrevMonthUsersPer(`${growthRate == Infinity ? 0 : growthRate.toFixed(2)}%`);
+      setPrevMonthUsersPer(
+        `${growthRate == null || isNaN(growthRate) ? 0 : growthRate.toFixed(2)}%`
+      );
     }
     console.log("userError", userError);
   }, [userLoading, data]);
@@ -73,7 +75,7 @@ function Dashboard() {
       });
       const growthRate = ((thisWeekReq.length - lastWeekReq.length) / lastWeekReq.length) * 100;
       setTotalReqThisWeek(thisWeekReq.length);
-      setTotalLastWeek(`${growthRate == Infinity ? 0 : growthRate.toFixed(2)}%`);
+      setTotalLastWeek(`${growthRate == null || isNaN(growthRate) ? 0 : growthRate.toFixed(2)}%`);
     }
   }, [planReqLoading, planReq]);
 

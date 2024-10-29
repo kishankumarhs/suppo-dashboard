@@ -22,8 +22,9 @@ import Icon from "@mui/material/Icon";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
+import { Chip } from "@mui/material";
 
-function Invoice({ date, id, price, noGutter }) {
+function Invoice({ date, id, price, noGutter, status, suppoCoin }) {
   return (
     <MDBox
       component="li"
@@ -46,11 +47,11 @@ function Invoice({ date, id, price, noGutter }) {
         <MDTypography variant="button" fontWeight="regular" color="text">
           {price}
         </MDTypography>
+        <MDTypography variant="button" fontWeight="regular" color="text">
+          {suppoCoin}
+        </MDTypography>
         <MDBox display="flex" alignItems="center" lineHeight={1} ml={3} sx={{ cursor: "pointer" }}>
-          <Icon fontSize="small">picture_as_pdf</Icon>
-          <MDTypography variant="button" fontWeight="bold">
-            &nbsp;PDF
-          </MDTypography>
+          <Chip label={status || "success"} variant="outlined" color="success" />
         </MDBox>
       </MDBox>
     </MDBox>
@@ -68,6 +69,8 @@ Invoice.propTypes = {
   id: PropTypes.string.isRequired,
   price: PropTypes.string.isRequired,
   noGutter: PropTypes.bool,
+  status: PropTypes.string,
+  suppoCoin: PropTypes.number,
 };
 
 export default Invoice;

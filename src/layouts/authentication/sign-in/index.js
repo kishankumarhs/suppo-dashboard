@@ -67,13 +67,15 @@ function Basic() {
   const handleSignIn = async (e) => {
     e.preventDefault();
     if (Object.values(authenticationError).filter((f) => f !== "").length > 0) return;
-    await singIn({
+    const { data, loading, error } = await singIn({
       ...authentication,
     });
+    console.log("auth", error);
     if (error)
       setAuthenticationError({
         error: error.message,
       });
+    console.log("auth data", data);
     if (data) {
       localStorage.setItem("token", data?.access_token);
       navigate("/");
