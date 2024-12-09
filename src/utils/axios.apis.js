@@ -125,7 +125,12 @@ export const PAYOUT_ENDPOINT = {
     METHOD: "POST",
     URL: "payouts/get-all-payouts",
   },
+  UPDATE_STATUS: {
+    METHOD: "POST",
+    URL: "payouts/status",
+  },
 };
+
 export const APPLICATION_CONFIG_ENDPOINT = {
   GET_ALL_CONFIG: {
     METHOD: "GET",

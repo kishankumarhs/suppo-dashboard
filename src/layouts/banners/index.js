@@ -14,7 +14,7 @@ import DataTable from "examples/Tables/DataTable";
 import { useGetRequest, usePostRequestLazy } from "utils/axiosHooks";
 import { BANNERS_ENDPOINT } from "utils/axios.apis";
 import bannersTableData from "./data";
-import { CircularProgress, Icon, Modal, Stack, TextField } from "@mui/material";
+import { CircularProgress, Icon, Modal, Stack, TextField, ThemeProvider } from "@mui/material";
 import MDButton from "components/MDButton";
 import { useState } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -91,13 +91,15 @@ function Banners() {
                 name="title"
                 variant="outlined"
               />
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                  label="Event Date"
-                  value={bannerData.event_date}
-                  onChange={(value) => setBannerData({ ...bannerData, event_date: value })}
-                />
-              </LocalizationProvider>
+              <ThemeProvider>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker
+                    label="Event Date"
+                    value={bannerData.event_date}
+                    onChange={(value) => setBannerData({ ...bannerData, event_date: value })}
+                  />
+                </LocalizationProvider>
+              </ThemeProvider>
               <MDButton onClick={handleSave} variant="gradient" color="dark">
                 {saveLoading ? (
                   <CircularProgress size={16} />
