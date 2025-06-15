@@ -11,6 +11,8 @@ import SignUp from "layouts/authentication/sign-up";
 import Icon from "@mui/material/Icon";
 import Banners from "layouts/banners";
 import Songs from "layouts/songs";
+import UserInfo from "layouts/userInfo";
+import RetryPage from "layouts/userInfo/retry";
 
 const routes = [
   {
@@ -98,6 +100,25 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/sign-up",
     component: <SignUp />,
+  },
+  {
+    type: "collapse",
+    name: "Conformation",
+    key: "conformation",
+    showInNav: false,
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/payouts/conformation",
+    component: <UserInfo />,
+  },
+  {
+    type: "collapse",
+    name: "Error",
+    key: "error",
+    showInNav: false,
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/payouts/error",
+    component: <RetryPage />,
+    RetryPage,
   },
 ];
 
